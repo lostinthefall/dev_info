@@ -1,27 +1,18 @@
 package com.nishinonaru.devinfo.display.main;
 
 
-import android.os.AsyncTask;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.nishinonaru.devinfo.R;
-import com.nishinonaru.devinfo.global.Const;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -30,6 +21,9 @@ import java.util.Map;
 public class MainFragment extends Fragment {
 
     private static final String TAG = "MainFragment";
+    private RecyclerView mRecyclerView;
+    private MainRvAdapter mMainRvAdapter;
+
 
     public MainFragment() {
         // Required empty public constructor
@@ -44,40 +38,54 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
 
-        //startActivity(new Intent(getActivity(), WebViewActivity.class));
-
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                testJsoup();
-                return null;
-            }
-        }.execute();
+        initView(v);
 
 
         return v;
     }
 
-    Document doc;
-
-    private void testJsoup() {
-        try {
-            doc = Jsoup.connect(Const.ADDRESS_ANDROID_CHINA).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        List<Map<String, String>> list = new ArrayList<>();
-        Elements elements = doc.getElementsByClass("focus");
-        for (Element e : elements) {
-            Map<String, String> map = new Hashtable<>();
-            map.put("title", e.getElementsByTag("a").select("img").attr("alt"));
-            list.add(map);
-        }
-        for (Map<String, String> map : list) {
-            Log.d(TAG, "testJsoup: " + map.get("title"));
-        }
+    private void initView(View v) {
+        mMainRvAdapter = new MainRvAdapter(this.getActivity());
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.rvContent);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        mRecyclerView.setAdapter(mMainRvAdapter);
     }
 
 
+    class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.MainViewHolder> {
+
+        private Context mContext;
+
+        public MainRvAdapter(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        public MainRvAdapter.MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return null;
+        }
+
+        @Override
+        public void onBindViewHolder(MainRvAdapter.MainViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return 0;
+        }
+
+        class MainViewHolder extends RecyclerView.ViewHolder {
+
+            TextView tvTitle;
+            ImageView ivHead;
+
+            public MainViewHolder(View itemView) {
+                super(itemView);
+                //tvTitle = itemView.findViewById(R.id.)
+
+
+            }
+        }
+    }
 }
