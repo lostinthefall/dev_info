@@ -8,7 +8,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0.0.programming.1.2016-1202-1721" // can show content la
+        versionName "1.0.0.programming.1.2016-1202-1904" // setup webview la
+        //versionName "1.0.0.programming.1.2016-1202-1721" // can show content la
         //versionName "1.0.0.programming.1.2016-1202-1203" // add DrawerLayout
         //versionName "1.0.0.programming.1.2016-1201-1847" // test jsoup
         //versionName "1.0.0.programming.1.2016-1201-1538" // add jsoup

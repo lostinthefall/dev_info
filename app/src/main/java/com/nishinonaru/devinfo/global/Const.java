@@ -8,6 +8,6 @@ public class Const {
 
     public static final String ADDRESS_ANDROID_CHINA = "http://www.androidchina.net/";
 
-
+    public static final String SHOW_ITEM = "show_item";
 
 }

@@ -30,14 +30,18 @@ public class NewsItem {
             e.printStackTrace();
         }
         List<ShowItem> list = new ArrayList<>();
-        Elements elements = doc.getElementsByClass("focus");
+        Elements elements = doc.getElementsByClass("excerpt");
         for (Element e : elements) {
             ShowItem item = new ShowItem();
-            item.setNewsTitle(e.getElementsByTag("a").select("img").attr("alt"));
-            item.setImgPath(e.getElementsByTag("a").select("img").attr("src"));
-            Log.d(TAG, "getItems: " + item);
+            item.setArticlePath(e.getElementsByTag("header").select("h2").select("a").attr("href"));
+            item.setImgPath(e.getElementsByTag("div").select("a").select("img").attr("src"));
+            // label label-important
+            item.setNewsTitle(e.getElementsByTag("header").select("h2").select("a").text());
+            Log.d(TAG, "getItems: " + item.toString());
             list.add(item);
         }
+
+
         return list;
     }
 }

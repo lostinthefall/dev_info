@@ -2,6 +2,7 @@ package com.nishinonaru.devinfo.display.main;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 
 import com.nishinonaru.devinfo.R;
 import com.nishinonaru.devinfo.data.entity.ShowItem;
+import com.nishinonaru.devinfo.display.web.WebViewActivity;
+import com.nishinonaru.devinfo.global.Const;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +60,7 @@ public class MainFragment extends Fragment implements MainContract.View {
     }
 
     private void initView(View v) {
-        mMainRvAdapter = new MainRvAdapter(this.getActivity(), new ArrayList<ShowItem>(0));
+        mMainRvAdapter = new MainRvAdapter(this.getActivity(), new ArrayList<ShowItem>(0), mItemListener);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.rvContent);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         mRecyclerView.setAdapter(mMainRvAdapter);
@@ -72,9 +75,11 @@ public class MainFragment extends Fragment implements MainContract.View {
 
         private Context mContext;
         private List<ShowItem> mInfoList;
+        private RvClickListener mListener;
 
-        public MainRvAdapter(Context context, List<ShowItem> infoList) {
+        public MainRvAdapter(Context context, List<ShowItem> infoList, RvClickListener listener) {
             mContext = context;
+            mListener = listener;
             setList(infoList);
         }
 
@@ -96,10 +101,16 @@ public class MainFragment extends Fragment implements MainContract.View {
 
         @Override
         public void onBindViewHolder(MainRvAdapter.MainViewHolder holder, int position) {
-            ShowItem item = mInfoList.get(position);
+            final ShowItem item = mInfoList.get(position);
             checkNotNull(item, "item can not be null in onBindViewHolder");
             holder.tvTitle.setText(item.getNewsTitle());
             showImage(mContext, item.getImgPath(), holder.ivHead);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onItemClick(item);
+                }
+            });
         }
 
         @Override
@@ -119,4 +130,17 @@ public class MainFragment extends Fragment implements MainContract.View {
             }
         }
     }
+
+    public interface RvClickListener {
+        void onItemClick(ShowItem showItem);
+    }
+
+    RvClickListener mItemListener = new RvClickListener() {
+        @Override
+        public void onItemClick(ShowItem showItem) {
+            Intent intent = new Intent(getActivity(), WebViewActivity.class);
+            intent.putExtra(Const.SHOW_ITEM, showItem);
+            startActivity(intent);
+        }
+    };
 }
