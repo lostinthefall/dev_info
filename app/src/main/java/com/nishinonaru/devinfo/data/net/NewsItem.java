@@ -6,6 +6,7 @@ package com.nishinonaru.devinfo.data.net;
 
 import android.util.Log;
 
+import com.nishinonaru.devinfo.data.entity.ShowItem;
 import com.nishinonaru.devinfo.global.Const;
 
 import org.jsoup.Jsoup;
@@ -15,31 +16,28 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
-
-import static android.content.ContentValues.TAG;
 
 public class NewsItem {
 
-    Document doc;
+    private Document doc;
+    private static final String TAG = "NewsItem";
 
-    private void testJsoup() {
+    public List<ShowItem> getItems() {
         try {
             doc = Jsoup.connect(Const.ADDRESS_ANDROID_CHINA).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<Map<String, String>> list = new ArrayList<>();
+        List<ShowItem> list = new ArrayList<>();
         Elements elements = doc.getElementsByClass("focus");
         for (Element e : elements) {
-            Map<String, String> map = new Hashtable<>();
-            map.put("title", e.getElementsByTag("a").select("img").attr("alt"));
-            list.add(map);
+            ShowItem item = new ShowItem();
+            item.setNewsTitle(e.getElementsByTag("a").select("img").attr("alt"));
+            item.setImgPath(e.getElementsByTag("a").select("img").attr("src"));
+            Log.d(TAG, "getItems: " + item);
+            list.add(item);
         }
-        for (Map<String, String> map : list) {
-            Log.d(TAG, "testJsoup: " + map.get("title"));
-        }
+        return list;
     }
 }

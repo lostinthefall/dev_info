@@ -5,4 +5,12 @@ package com.nishinonaru.devinfo.display.main;
  */
 
 public interface MainContract {
+
+    interface View {
+        void setPresenter(MainPresenter presenter);
+    }
+
+    interface Presenter {
+        void start();
+    }
 }

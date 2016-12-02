@@ -12,8 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.nishinonaru.devinfo.R;
+import com.nishinonaru.devinfo.data.DataModule;
+import com.nishinonaru.devinfo.data.net.NewsItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,9 +35,13 @@ public class MainActivity extends AppCompatActivity
          * fab
          */
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(v -> Snackbar
-                .make(v, "This is a test of snack bar", Snackbar.LENGTH_SHORT)
-                .setAction("Action", null).show());
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, "This is a test of snack bar", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
+            }
+        });
 
         /**
          * drawer layout
@@ -52,12 +59,19 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         /**
+         * init dagger
+         */
+        DaggerMainComponent.builder().mainModule(new MainModule())
+                .dataModule(new DataModule()).build().inject(this);
+
+        MainFragment mainFragment = MainFragment.newInstance();
+        new MainPresenter(mainFragment, new NewsItem());
+
+        /**
          * fragment
          */
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.rvContainer, MainFragment.newInstance(), null).commit();
-
-
+                .add(R.id.rvContainer, mainFragment, null).commit();
     }
 
     @Override
